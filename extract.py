@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from sqlalchemy import create_engine, text, Table, MetaData, Integer
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.schema import Column 
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 api = "https://api.data.gov.hk/v2/filter?q="
 
@@ -33,7 +35,8 @@ filter_list = []
 filter_date_col = []
 filter_date_col.append(configure.get('api_params','date_col_index')) 
 filter_date_col.append(configure.get('api_params','date_col_filter')) 
-filter_date_col.append([ (datetime.now()- timedelta( days= int(configure.get('api_params', 'date_col_time_delta') ))).strftime("%d/%m/%Y") ]) 
+filter_date_col.append([ (datetime.now()- timedelta( days= int(configure.get('api_params', 'date_col_time_delta') )))\
+                .strftime("%d/%m/%Y") ]) 
 filter_list.append(filter_date_col)
 
 params_dic['filters'] = filter_list 
@@ -158,3 +161,17 @@ print(vv.ID)
 vv.FirstName = 'vv changed name'
 session.commit()
 
+# data initialization
+for x in range(1, 5):
+    print(x)
+    print((datetime.now() - timedelta(days =  x)).strftime("%d/%m/%Y"))
+
+
+df = pd.read_sql("select * from covid.persons", engine)
+print(df.head())
+
+x = df['LastName']
+y = df['Age']
+
+sns.barplot(x = x, y =y)
+plt.show()

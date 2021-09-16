@@ -17,5 +17,5 @@ This project obtains COVID worldwide data from [API provided by HK Gov](https://
 
 
 
-
+https://data.gov.hk/en/help/api-spec#filterAPI
 
