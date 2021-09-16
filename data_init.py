@@ -3,10 +3,13 @@ from datetime import datetime, timedelta
 import requests
 import json
 import pandas as pd
+# from os import path, walk
+# from os.path import join
+import os
 
 file_list = []
 dfs = []
-for x in range(1, 5):
+""" for x in range(1, 5):
     print(x)
     print((datetime.now() - timedelta(days =  x)).strftime("%d/%m/%Y"))
     date_value = (datetime.now() - timedelta(days =  x))
@@ -17,20 +20,22 @@ for x in range(1, 5):
     file_list.append(file_name)
     
     with open(file_name, 'w') as f:
-        json.dump(json_data, f) 
-for file in file_list:
-    print(file)
-    result = pd.read_json(file)    
-    dfs.append(result)
+        json.dump(json_data, f)  """
+for dirpath, dirnames, filenames  in os.walk("data"):
+    for f in filenames:
+        abs_file_path = os.path.join(dirpath, f)
+        print(abs_file_path)
+        result = pd.read_json(abs_file_path)    
+        dfs.append(result)
 
 print(len(dfs))
 
 final_result = pd.concat(dfs, ignore_index=True)
 
 print(f"size: {final_result.size}")
-print(final_result.head())
+""" print(final_result.head())
 print(final_result.groupby("As of date")["As of date"].size())
-print(final_result.groupby("As of date")["As of date"].count())
+print(final_result.groupby("As of date")["As of date"].count())  """
 
 
     
