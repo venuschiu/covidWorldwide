@@ -55,15 +55,22 @@ def get_graph(date_value):
 
 # https://plotly.com/python-api-reference/generated/plotly.express.choropleth
     container = "Latest worldwide COVID case provided by data.gov.hk "
-    fig = px.choropleth(
+    fig = px.choropleth_mapbox(
         data_frame=map_data,
         geojson=data_prep.geo_world_ok,
         locations='country',
         
         color=map_data['confirmed_case_color'],
-        #hover_data=['Countries/areas', 'Cumulative number of confirmed cases'],
-        #color_continuous_scale=px.colors.sequential.YlOrRd,
-        range_color = (0, map_data['confirmed_case_color'].max())
+        color_continuous_scale=px.colors.sequential.YlOrRd,
+        range_color = (0, map_data['confirmed_case_color'].max()),
+        hover_name = 'country',
+        hover_data={'confirmed_case_color': False, 'country': False, 'confirmed_case': True},
+        mapbox_style = 'open-street-map',
+        zoom = 1,
+        center = {'lat': 19, 'lon': 11},
+        opacity=0.5
+        
+        
         
     ); 
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0},
