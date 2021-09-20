@@ -54,6 +54,7 @@ def get_graph(date_value):
     map_data = data_prep.latest.copy()
 
 # https://plotly.com/python-api-reference/generated/plotly.express.choropleth
+# https://github.com/plotly/dash-sample-apps/tree/main/apps/dash-uber-rides-demo
     container = "Latest worldwide COVID case provided by data.gov.hk "
     fig = px.choropleth_mapbox(
         data_frame=map_data,
