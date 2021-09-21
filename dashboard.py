@@ -20,7 +20,7 @@ app = dash.Dash(__name__)
 # App layout
 app.layout = html.Div( [
 
-    html.H1("My first dash app"),
+    html.H1("Worldwide COVID"),
     html.Div(id = 'output_container', children= []),
         dcc.Dropdown(id="select_date",
                  options=[

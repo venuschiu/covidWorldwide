@@ -5,9 +5,15 @@ import numpy as np
 # ------------------ Get the data -----------
 # print(data_init.final_result.head())
 data_init.final_result["As of date"] = pd.to_datetime(data_init.final_result["As of date"], format='%d/%m/%Y')
-latest = data_init.final_result.loc[ data_init.final_result["As of date"] == data_init.final_result["As of date"] .max() ] \
+
+""" latest = data_init.final_result.loc[ data_init.final_result["As of date"] == data_init.final_result["As of date"] .max() ] \
                                     .groupby(["As of date", "Countries/areas"], as_index = False) \
                                     [["As of date", "Countries/areas", "Cumulative number of confirmed cases"]].sum()
+ """
+
+latest = data_init.final_result.groupby(["As of date", "Countries/areas"], as_index = False) \
+                                        [["As of date", "Countries/areas", "Cumulative number of confirmed cases"]].sum()
+
 
 # rename columns
 latest = latest.rename(columns = {"As of date": 'as_of_date', 'Countries/areas': 'country', 'Cumulative number of confirmed cases': 'confirmed_case'})
@@ -83,6 +89,7 @@ geo_world_ok= {'type': 'FeatureCollection', 'features': countries_geo}
 latest['confirmed_case_color'] = latest['confirmed_case'].apply(np.log10)
 
 print(latest.head(5))
+print(latest.size)
 
 
 # get the maximum value to cap display values
