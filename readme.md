@@ -19,3 +19,4 @@ This project obtains COVID worldwide data from [API provided by HK Gov](https://
 
 https://data.gov.hk/en/help/api-spec#filterAPI
 
+https://data.gov.hk/en-data/dataset/hk-dh-chpsebcddr-novel-infectious-agent/resource/8b5a8f82-94f6-427d-9a2f-3567d65ca79b

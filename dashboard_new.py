@@ -11,10 +11,13 @@ from datetime import datetime as dt
 
 app = dash.Dash(__name__)
 
+# Plotly mapbox public token
+mapbox_access_token = "pk.eyJ1IjoicGxvdGx5bWFwYm94IiwiYSI6ImNrOWJqb2F4djBnMjEzbG50amg0dnJieG4ifQ.Zme1-Uzoi75IaFbieBDl3A"
 
 
 list_of_locations = data_prep.latest['country'].unique()
-print(list_of_locations)
+print(data_prep.values)
+print(data_prep.ticks)
 
 
 # App layout
@@ -28,25 +31,18 @@ app.layout = html.Div(
                 html.Div(
                     className="four columns div-user-controls",
                     children=[
-                        html.A(
-                            html.Img(
-                                className="logo",
-                                src=app.get_asset_url("dash-logo-new.png"),
-                            ),
-                            href="https://plotly.com/dash/",
-                        ),
-                        html.H2("COVID WORLDWIDE"),
+                        html.H1("COVID WORLDWIDE"),
                         html.P(
                             """Select different days using the date picker or by selecting
-                            different countries."""
+                            different country."""
                         ),
                         html.Div(
                             className="div-for-dropdown",
                             children=[
                                 dcc.DatePickerSingle(
                                     id="date-picker",
-                                    min_date_allowed=dt(2021, 9, 10),
-                                    max_date_allowed=dt(2021, 9, 15),
+                                    min_date_allowed=dt(2021, 9, 1),
+                                    max_date_allowed=dt(2021, 9, 30),
                                     initial_visible_month=dt(2021, 9, 15),
                                     date=dt(2021, 9, 10).date(),
                                     display_format="MMMM D, YYYY",
@@ -79,8 +75,8 @@ app.layout = html.Div(
                         html.P(id="date-value"),
                         dcc.Markdown(
                             """
-                            Source: [FiveThirtyEight](https://github.com/fivethirtyeight/uber-tlc-foil-response/tree/master/uber-trip-data)
-                            Links: [Source Code](https://github.com/plotly/dash-sample-apps/tree/main/apps/dash-uber-rides-demo) | [Enterprise Demo](https://plotly.com/get-demo/)
+                            Source: [data.gov.hk](https://data.gov.hk/en-data/dataset/hk-dh-chpsebcddr-novel-infectious-agent/resource/8b5a8f82-94f6-427d-9a2f-3567d65ca79b)
+                            Links: [Source Code](https://github.com/venuschiu/covidWorldwide) 
                             """
                         ),
                     ],
@@ -92,9 +88,6 @@ app.layout = html.Div(
                         dcc.Graph(id="map-graph"),
                         html.Div(
                             className="text-padding",
-                            children=[
-                                "Select any of the bars on the histogram to section data by time."
-                            ],
                         ),
                         dcc.Graph(id="line_plot"),
                     ],
@@ -119,7 +112,7 @@ def get_graph(selected_date):
 
 # https://plotly.com/python-api-reference/generated/plotly.express.choropleth
 # https://github.com/plotly/dash-sample-apps/tree/main/apps/dash-uber-rides-demo
-   
+    px.set_mapbox_access_token(mapbox_access_token)
     fig = px.choropleth_mapbox(
         data_frame=map_result,
         geojson=data_prep.geo_world_ok,
@@ -130,11 +123,14 @@ def get_graph(selected_date):
         hover_name = 'country',
         hover_data={'confirmed_case_color': False, 'country': False, 'confirmed_case': True},
         mapbox_style = 'stamen-toner',
+        # mapbox_style = 'open-street-map',
         zoom = 1,
         center = {'lat': 19, 'lon': 11},
         opacity=0.5
     ); 
+  
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0},
+                      autosize=True,
                        coloraxis_colorbar = {
                            'title': 'Confirmed people' ,
                            'tickvals' : data_prep.values,
@@ -146,19 +142,22 @@ def get_graph(selected_date):
     )
     return fig
 
+
 @app.callback(
     Output("line_plot", "figure"),
     Input("location-dropdown", "value")
-    
 )
 def update_plot(selected_country):
     
     print(selected_country)
     map_data = data_prep.latest.copy()
-    map_result = map_data.loc[map_data['country'] == selected_country]
+    map_result = map_data
+    if selected_country is not None:
+        map_result = map_data.loc[map_data['country'] == selected_country]
+    
     print(map_result)
     fig = px.line(map_result, 
-        x="as_of_date", y="confirmed_case", color='country')
+        x="as_of_date", y="confirmed_case", color='country', markers = True)
 
     return fig
 

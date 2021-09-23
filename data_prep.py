@@ -8,8 +8,8 @@ data_init.final_result["As of date"] = pd.to_datetime(data_init.final_result["As
 
 """ latest = data_init.final_result.loc[ data_init.final_result["As of date"] == data_init.final_result["As of date"] .max() ] \
                                     .groupby(["As of date", "Countries/areas"], as_index = False) \
-                                    [["As of date", "Countries/areas", "Cumulative number of confirmed cases"]].sum()
- """
+                                    [["As of date", "Countries/areas", "Cumulative number of confirmed cases"]].sum() """
+
 
 latest = data_init.final_result.groupby(["As of date", "Countries/areas"], as_index = False) \
                                         [["As of date", "Countries/areas", "Cumulative number of confirmed cases"]].sum()
@@ -19,6 +19,9 @@ latest = data_init.final_result.groupby(["As of date", "Countries/areas"], as_in
 latest = latest.rename(columns = {"As of date": 'as_of_date', 'Countries/areas': 'country', 'Cumulative number of confirmed cases': 'confirmed_case'})
 
 print(latest.head(5))
+
+print(latest.groupby(['as_of_date'])['as_of_date'].count())
+print(latest.loc[latest['country'] == 'Afghanistan'])
 
 # prepare the geo json data
 world_geo_path = 'custom.geo.json'

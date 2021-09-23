@@ -9,7 +9,7 @@ import os
 
 file_list = []
 dfs = []
-""" for x in range(1, 5):
+""" for x in range(1, 23):
     print(x)
     print((datetime.now() - timedelta(days =  x)).strftime("%d/%m/%Y"))
     date_value = (datetime.now() - timedelta(days =  x))
@@ -20,7 +20,7 @@ dfs = []
     file_list.append(file_name)
     
     with open(file_name, 'w') as f:
-        json.dump(json_data, f)  """
+        json.dump(json_data, f) """ 
 for dirpath, dirnames, filenames  in os.walk("data"):
     for f in filenames:
         abs_file_path = os.path.join(dirpath, f)
